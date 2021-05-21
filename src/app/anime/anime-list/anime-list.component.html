@@ -1,0 +1,16 @@
+<div *ngIf="state$ | async as state">
+  <div *ngIf="state.loading;else loaded">
+    loading...
+  </div>
+
+  <ng-template #loaded>
+    <ul>
+      <li *ngFor="let anime of state.animeList">{{anime.title.native}}</li>
+    </ul>
+
+    <div *ngIf="state.pageInfo" fxLayout fxLayoutGap="8px">
+      <button *ngIf="state.pageInfo.currentPage !== 1" (click)="more(state.pageInfo.currentPage - 1)">前へ</button>
+      <button *ngIf="state.pageInfo.hasNextPage" (click)="more(state.pageInfo.currentPage + 1)">次へ</button>
+    </div>
+  </ng-template>
+</div>
