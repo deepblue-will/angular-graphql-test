@@ -1,8 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { QueryRef } from 'apollo-angular';
+import { gql, QueryRef } from 'apollo-angular';
 import { BehaviorSubject } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { AnimeListQuery } from './anime-list.query';
+
+const fragments = {
+  pageInfo: gql`
+    fragment MediaPageInfo on PageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+      perPage
+    }
+`,
+  media: gql`
+    fragment MediaItem on Media {
+      id
+      title {
+        romaji,
+        native,
+      }
+    }
+`
+}
 
 @Component({
   templateUrl: './anime-list.component.html',
@@ -10,6 +30,8 @@ import { AnimeListQuery } from './anime-list.query';
   providers:[AnimeListQuery]
 })
 export class AnimeListComponent implements OnInit {
+  static fragments = fragments;
+
   fetchQuery!: QueryRef<any>;
 
   state$ = new BehaviorSubject<any>({});
